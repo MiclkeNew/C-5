@@ -1,50 +1,77 @@
 #include <iostream>
+#include <string>
 
-class Car // определяю класс
+class Car
 {  
+private:
+    static int count;
 public:
+    Car() 
+    { 
+    count = ++count; 
+    } 
+    ~Car() 
+    { 
+    --count; 
+    } 
+    void getCount(){
+        std::cout << "V klasse " << count << " ob_ektov\n";
+    }
     int power;
-    int cylinder; // без параметров
+    int cylinder;
     std::string mark;
+
+    // Конструктор с параметрами и значением по умолчанию
+    Car(int x_cylinder, std::string x_mark, int x_power = 100)
+        : cylinder(x_cylinder), mark(x_mark), power(x_power) {}
+
     void info()
     {
-        std::cout << "MARK: " << mark << "\tPOWER: " << power << "\tCYLINDERS: " << cylinder<< "\n";
+        std::cout << "MARK: " << mark << "\tPOWER: " << power << "\tCYLINDERS: " << cylinder << "\n";
     }
-    Car(int x_cylinder, std::string x_mark, int x_power = 100) // с параметрами, по умолчанию
+
+    int getPower() // Геттер
+    { 
+        return power; 
+    }
+
+    void setPower(int newPower) // Сеттер
     {
-        cylinder = x_cylinder;
-        power = x_power;
-        mark = x_mark;
-    }
-    int getPower(){ //Геттер
-        return power;
-    }
-    void SetPower( int NewPower) // Сеттер
-    {
-        power = NewPower;
+        power = newPower;
     }
 };
-
+int Car::count=0;
 class Lorry : public Car
 {
 public:
     int mass;
-    void information()
+
+    // Конструктор для класса Lorry
+    Lorry(int x_cylinder, std::string x_mark, int x_power, int x_mass)
+        : Car(x_cylinder, x_mark, x_power), mass(x_mass) {}
+
+    void info()
     {
-        std::cout << "MARK: " << mark << "\tPOWER: " << power << "\tCYLINDERS: " << cylinder<< "MASS" << mass << "\n";
+        std::cout << "MARK: " << mark << "\tPOWER: " << power << "\tCYLINDERS: " << cylinder << "\tMASS: " << mass << "\n";
     }
 };
-Lorry kamaz;
-kamaz.power = 100;
 
 int main()
 {
     Car mers(8, "Mers", 200);
+    mers.getCount();
     mers.info();
-    mers.mark = "Mersedes";
+    mers.mark = "Mercedes";
     mers.cylinder = 6;
     mers.info();
-    std::cout<< mers.getPower()<< "\n";
-    mers.SetPower(500);
+    std::cout << mers.getPower() << "\n";
+    mers.setPower(500);
     mers.info();
-} // mers перестает существовать
+
+    // Создаем объект класса Lorry
+    Lorry kamaz(6, "Kamaz", 300, 5000);
+    kamaz.info();
+    kamaz.setPower(100); // Изменение мощности
+    kamaz.info();
+    return 0;
+}
